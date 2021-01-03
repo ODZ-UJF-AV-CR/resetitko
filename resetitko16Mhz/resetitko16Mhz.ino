@@ -1,6 +1,6 @@
 String githash = "379276a";
 String FWversion = "R1"; // 16 MHz crystal
-#define ZERO 256  // 5th channel is channel 1 (column 10 from 0, ussually DCoffset or DCoffset+1)
+#define ZERO 253  // 5th channel is channel 1 (column 10 from 0, ussually DCoffset or DCoffset+1)
 
 /*
   SPACEDOS with Resetitko for RT
@@ -125,9 +125,9 @@ void setup()
   ADCSRB = 0;               // Switching ADC to Free Running mode
   sbi(ADCSRA, ADATE);       // ADC autotrigger enable (mandatory for free running mode)
   sbi(ADCSRA, ADSC);        // ADC start the first conversions
-  sbi(ADCSRA, 2);           // 0x100 = clock divided by 16, 62.5 kHz, 208 us for 13 cycles of one AD conversion, 24 us fo 1.5 cycle for sample-hold
-  cbi(ADCSRA, 1);        
-  cbi(ADCSRA, 0);        
+  sbi(ADCSRA, 2);           // 0x111 = clock divided by 128, 125 kHz, 104 us for 13 cycles of one AD conversion, 12 us for 1.5 cycle for sample-hold
+  sbi(ADCSRA, 1);        
+  sbi(ADCSRA, 0);        
 
   pinMode(RESET, OUTPUT);   // reset for peak detetor
 
@@ -187,9 +187,9 @@ void setup()
   ADCSRB = 0;               // Switching ADC to Free Running mode
   sbi(ADCSRA, ADATE);       // ADC autotrigger enable (mandatory for free running mode)
   sbi(ADCSRA, ADSC);        // ADC start the first conversions
-  sbi(ADCSRA, 2);           // 0x100 = clock divided by 16, 62.5 kHz, 208 us for 13 cycles of one AD conversion, 24 us fo 1.5 cycle for sample-hold
-  cbi(ADCSRA, 1);
-  cbi(ADCSRA, 0);
+  sbi(ADCSRA, 2);           // 0x111 = clock divided by 128
+  sbi(ADCSRA, 1);
+  sbi(ADCSRA, 0);
   sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
   while (bit_is_clear(ADCSRA, ADIF)); // wait for the first conversion
   sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
@@ -199,9 +199,9 @@ void setup()
   ADCSRB = 0;               // Switching ADC to Free Running mode
   sbi(ADCSRA, ADATE);       // ADC autotrigger enable (mandatory for free running mode)
   sbi(ADCSRA, ADSC);        // ADC start the first conversions
-  sbi(ADCSRA, 2);           // 0x100 = clock divided by 16, 62.5 kHz, 208 us for 13 cycles of one AD conversion, 24 us fo 1.5 cycle for sample-hold
-  cbi(ADCSRA, 1);
-  cbi(ADCSRA, 0);
+  sbi(ADCSRA, 2);           // 0x111 = clock divided by 128
+  sbi(ADCSRA, 1);
+  sbi(ADCSRA, 0);
   // combine the two bytes
   u_sensor = (hi << 7) | (lo >> 1);
   // manage negative values
@@ -247,9 +247,9 @@ void loop()
   ADCSRB = 0;               // Switching ADC to Free Running mode
   sbi(ADCSRA, ADATE);       // ADC autotrigger enable (mandatory for free running mode)
   sbi(ADCSRA, ADSC);        // ADC start the first conversions
-  sbi(ADCSRA, 2);           // 0x100 = clock divided by 16, 62.5 kHz, 208 us for 13 cycles of one AD conversion, 24 us fo 1.5 cycle for sample-hold
-  cbi(ADCSRA, 1);        
-  cbi(ADCSRA, 0);        
+  sbi(ADCSRA, 2);           // 0x111 = clock divided by 128
+  sbi(ADCSRA, 1);        
+  sbi(ADCSRA, 0);        
   sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
   while (bit_is_clear(ADCSRA, ADIF)); // wait for the first conversion 
   sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
@@ -259,9 +259,9 @@ void loop()
   ADCSRB = 0;               // Switching ADC to Free Running mode
   sbi(ADCSRA, ADATE);       // ADC autotrigger enable (mandatory for free running mode)
   sbi(ADCSRA, ADSC);        // ADC start the first conversions
-  sbi(ADCSRA, 2);           // 0x100 = clock divided by 16, 62.5 kHz, 208 us for 13 cycles of one AD conversion, 24 us fo 1.5 cycle for sample-hold
-  cbi(ADCSRA, 1);        
-  cbi(ADCSRA, 0);        
+  sbi(ADCSRA, 2);           // 0x111 = clock divided by 128
+  sbi(ADCSRA, 1);        
+  sbi(ADCSRA, 0);        
   // combine the two bytes
   u_sensor = (hi << 7) | (lo >> 1);
   // manage negative values
@@ -290,7 +290,7 @@ void loop()
   sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
   
   // dosimeter integration
-  for (uint32_t i=0; i<250000; i++)    // cca 10 s
+  for (uint32_t i=0; i<(2 * 46000); i++)    // cca 10 s
   {
     while (bit_is_clear(ADCSRA, ADIF)); // wait for end of conversion 
     delayMicroseconds(24);            // 24 us wait for 1.5 cycle of 62.5 kHz ADC clock for sample/hold for next conversion
