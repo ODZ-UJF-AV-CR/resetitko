@@ -1,5 +1,5 @@
-# resetitko
-Resetítko
+# resetitko - Device for remote reset of Georadis RT-56
 
-![resetitko](https://github.com/ODZ-UJF-AV-CR/resetitko/blob/main/doc/resetitko.jpg)
+Device solves Georadis RT56 detector software problem, which freezes the OS in the instrument. 
 
+![resetitko](/doc/img/resetitko_box.jpg)
