@@ -1,6 +1,6 @@
 String githash = "379276a";
-String FWversion = "R1"; // 16 MHz crystal
-#define ZERO 253  // 5th channel is channel 1 (column 10 from 0, ussually DCoffset or DCoffset+1)
+String FWversion = "R2"; // 16 MHz crystal
+#define ZERO 259  // 5th channel is channel 1 (column 10 from 0, ussually DCoffset or DCoffset+1)
 
 /*
   SPACEDOS with Resetitko for RT
@@ -216,24 +216,21 @@ void setup()
   rtc.resetClock();
 }
 
-bool rele = false; 
+bool rele_on = false; 
+bool rele_off = false; 
 
 void loop()
 {
   uint16_t histogram[CHANNELS];
-
-  while (Serial.available()) 
+ 
+  if (rele_on)
   {
-    char cvak = Serial.read();
-    if (cvak=='r') rele = true;
-  }
-  
-  if (rele)
-  {
-      digitalWrite(RELE_OFF, LOW);      
+      digitalWrite(RELE_OFF, LOW);  // switch on rele     
       digitalWrite(RELE_ON, HIGH);  
       delay(100); 
-      digitalWrite(RELE_ON, LOW);  
+      digitalWrite(RELE_ON, LOW);
+      rele_on = false;
+      rele_off = true;  
   }
   
   for(int n=0; n<CHANNELS; n++)
@@ -365,7 +362,7 @@ void loop()
     dataString += ",";
     dataString += String(offset);
     dataString += ",";
-    if (rele) {dataString += '1';} else {dataString += "0";} 
+    if (rele_off) {dataString += '1';} else {dataString += "0";} 
     
     for(int n=base_offset; n<(base_offset+RANGE); n++)  
     {
@@ -375,13 +372,23 @@ void loop()
     
     count++;
 
-    if (rele)
+    while (Serial.available()) 
     {
-        rele = false;
-        digitalWrite(RELE_ON, LOW);      
-        digitalWrite(RELE_OFF, HIGH);  
-        delay(100); 
-        digitalWrite(RELE_OFF, LOW);  
+      char cvak = Serial.read();
+      if (cvak=='r') 
+      {
+        rele_on = true;
+        rele_off = false;
+      }
+    }
+  
+    if (rele_off)
+    {
+      digitalWrite(RELE_ON, LOW);     // switch off rele  
+      digitalWrite(RELE_OFF, HIGH);  
+      delay(100); 
+      digitalWrite(RELE_OFF, LOW);
+      rele_off = false;  
     }
 
     {
