@@ -287,7 +287,7 @@ void loop()
   sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
   
   // dosimeter integration
-  for (uint32_t i=0; i<(2 * 46000); i++)    // cca 10 s
+  for (uint32_t i=0; i<(2 * 46000/16); i++)    // cca 10 s
   {
     while (bit_is_clear(ADCSRA, ADIF)); // wait for end of conversion 
     delayMicroseconds(24);            // 24 us wait for 1.5 cycle of 62.5 kHz ADC clock for sample/hold for next conversion
