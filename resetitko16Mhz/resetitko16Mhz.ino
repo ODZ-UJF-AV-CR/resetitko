@@ -1,6 +1,6 @@
 String githash = "379276a";
 String FWversion = "R2"; // 16 MHz crystal
-#define ZERO 259  // 5th channel is channel 1 (column 10 from 0, ussually DCoffset or DCoffset+1)
+#define ZERO 256  // 5th channel is channel 1 (column 10 from 0, ussually DCoffset or DCoffset+1)
 
 /*
   SPACEDOS with Resetitko for RT
