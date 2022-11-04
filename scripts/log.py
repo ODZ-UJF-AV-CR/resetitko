@@ -14,13 +14,16 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 logname = "./resetitko.log"
-#handler = TimedRotatingFileHandler(logname, when='h', interval=1, utc=True)
-handler = TimedRotatingFileHandler(logname, when='s', interval=20, utc=True)
+#logname = "./cardos.log"
+
+handler = TimedRotatingFileHandler(logname, when='h', interval=1, utc=True)
+#handler = TimedRotatingFileHandler(logname, when='s', interval=20, utc=True)
 #handler.setLevel(logging.INFO)
 #handler.suffix = "%Y%m%d%H%M"
 logger.addHandler(handler)
 
 '''
+# reset device
 ser.setDTR(False)
 time.sleep(0.5)
 ser.setDTR(True)
