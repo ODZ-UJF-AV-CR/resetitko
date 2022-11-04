@@ -21,7 +21,7 @@ def dolog(device, baudrate):
     while True:
         reading = ser.readline()
         if (len(reading) > 0):
-            data = str(int(round(time.time(),2))) + ',' + str(reading[:-1],'utf-8')
+            data = str(time.time()) + ',' + str(reading[:-1],'utf-8')
             print(data)
             logger.info(data)
 
@@ -61,4 +61,5 @@ if (not success):
     sys.exit("I can not find any tty device.")
 
 while True:
+    #sys.stdio.flush()
     None
